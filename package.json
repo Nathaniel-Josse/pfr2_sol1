@@ -1,0 +1,25 @@
+{
+  "name": "pfr_solution_1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "cavamarcher": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nathaniel-Josse/pfr2_sol1.git"
+  },
+  "author": "Nathaniel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nathaniel-Josse/pfr2_sol1/issues"
+  },
+  "homepage": "https://github.com/Nathaniel-Josse/pfr2_sol1#readme",
+  "dependencies": {
+    "jsdom": "^23.0.0",
+    "mongoose": "^8.0.3",
+    "node-xlsx": "^0.23.0",
+    "nodemon": "^3.0.2"
+  }
+}
