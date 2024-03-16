@@ -10,13 +10,13 @@ const fs = require('fs');
 const Film = require('./model/film');
 const mongoose = require('mongoose');
 
+// Lien à MongoDB
 mongoose
     .connect('mongodb://localhost:27017/cinematheque')
     .then(() => console.log("Connexion à MongoDB réussie !"))
     .catch((err) => console.log("Connexion à MongoDB échouée !", err));
 
-//Lien à MongoDB, et update
-
+// Routes
 app.get('/', async (req, res) => {
     try{
         const films = await Film.find();
@@ -28,12 +28,14 @@ app.get('/', async (req, res) => {
     }
 });
 
+// MàJ de la base de données
 app.post('/', async (req, res) => {
     let film = await Film.deleteMany(); // on supprime tous les documents de la collection pour update
 
     const filmXlsx = await xlsx.parse('assets/table/film.xlsx'); // on récupère le fichier excel
     const filmData = filmXlsx[0].data; // on récupère les données du fichier excel
     let filmStock = new Film(); // On va mettre en place un stock pour les films ayant plusieurs réalisateurs
+    let id = 1; // on initialise l'id à 1. On va l'incrémenter à chaque film, sauf si le film a plusieurs réalisateurs
     for await (const data of filmData) {
         if (data[0] !== 'Id'){ // on ignore la première ligne du fichier excel
             let currentFilm = new Film({
@@ -47,16 +49,19 @@ app.post('/', async (req, res) => {
                 genre: data[7],
                 synopsis: data[8]
             });
-            // FILTERS //
+            // --- FILTERS --- //
             // on enlève les balises html
             currentFilm.synopsis = currentFilm.synopsis.replace(/<[^>]*>?/gm, '');
-            // Si le titre est le même, c'est que le film a plusieurs réalisateurs
-            if (currentFilm.titre === filmStock.titre) {
-                currentFilm.realisateur = filmStock.realisateur + ', ' + currentFilm.realisateur;
-                currentFilm.id = filmStock.id;
-            // END OF FILTERS //
+            if (currentFilm.titre === filmStock.titre) { // Si le titre est le même que le film d'avant, c'est que le film a plusieurs réalisateurs. On va alors mettre à jour le film d'avant.
+                currentFilm.realisateur = filmStock.realisateur + ', ' + currentFilm.realisateur; // on met à jour les réalisateurs
+                currentFilm.id = filmStock.id; // on met à jour l'id
+            // --- END OF FILTERS --- //
             } else {
-                filmStock.save();
+                currentFilm.id = id; // on met à jour l'id
+                id++; // on incrémente l'id
+                if(currentFilm.id !== 1){ // on ne sauvegarde pas le premier film (qui est vide)
+                    filmStock.save();
+                }
             }
             // on met à jour le film courant
             filmStock = currentFilm;
