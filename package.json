@@ -2,9 +2,9 @@
   "name": "pfr_solution_1",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "cavamarcher": "nodemon server.js"
+    "cavamarcher": "nodemon app.js"
   },
   "repository": {
     "type": "git",
