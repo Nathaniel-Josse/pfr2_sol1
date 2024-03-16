@@ -2,9 +2,9 @@
   "name": "pfr_solution_1",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "cavamarcher": "nodemon app.js"
+    "cavamarcher": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/Nathaniel-Josse/pfr2_sol1#readme",
   "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.3",
     "jsdom": "^23.0.0",
     "mongoose": "^8.0.3",
     "node-xlsx": "^0.23.0",

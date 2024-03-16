@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MàJ Excel/MongoDB</title>
+</head>
+<body>
+    <h1>Mettre à jour : Excel -> MongoDB</h1>
+
+    <form action="/" method="post">
+        <input type="submit" value="Mise à Jour de la table"></input>
+    </form>
+
+    <h1>Liste des Films</h1>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Titre</th>
+            <th>Titre Original</th>
+            <th>Réalisateur</th>
+            <th>Année</th>
+            <th>Nationalité</th>
+            <th>Durée</th>
+            <th>Genre</th>
+            <th>Synopsis</th>
+        </tr>
+        <% films.forEach(film => { %>
+            <tr>
+                <td><%= film.id %></td>
+                <td><%= film.titre %></td>
+                <td><%= film.titre_original %></td>
+                <td><%= film.realisateur %></td>
+                <td><%= film.annee %></td>
+                <td><%= film.nationalite %></td>
+                <td><%= film.duree %></td>
+                <td><%= film.genre %></td>
+                <td><%= film.synopsis %></td>
+            </tr>
+        <% }) %>
+    </table>
+</body>
+</html>
