@@ -9,6 +9,7 @@ const xlsx = require('node-xlsx');
 const fs = require('fs');
 const Film = require('./model/film');
 const mongoose = require('mongoose');
+const path = 'assets/table/film.xlsx';
 
 // Lien à MongoDB
 mongoose
@@ -28,11 +29,10 @@ app.get('/', async (req, res) => {
     }
 });
 
-// MàJ de la base de données
-app.post('/', async (req, res) => {
+const handleUpdate = async () => {
     let film = await Film.deleteMany(); // on supprime tous les documents de la collection pour update
 
-    const filmXlsx = await xlsx.parse('assets/table/film.xlsx'); // on récupère le fichier excel
+    const filmXlsx = xlsx.parse(path); // on récupère le fichier excel
     const filmData = filmXlsx[0].data; // on récupère les données du fichier excel
     let filmStock = new Film(); // On va mettre en place un stock pour les films ayant plusieurs réalisateurs
     let id = 1; // on initialise l'id à 1. On va l'incrémenter à chaque film, sauf si le film a plusieurs réalisateurs
@@ -67,7 +67,19 @@ app.post('/', async (req, res) => {
             filmStock = currentFilm;
         }
     };
-    console.log("MàJ Done !");
+};
+
+if (fs.existsSync(path)) {
+    fs.watchFile(path, async () => { // watchFile est instable, à surveiller
+        await handleUpdate();
+        console.log("MàJ Done !");
+    });
+}
+
+// MàJ de la base de données
+app.post('/', async (req, res) => {
+    await handleUpdate();
+    console.log("MàJ manuelle Done !");
     res.redirect('/');
 });
 
